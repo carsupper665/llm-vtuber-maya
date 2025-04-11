@@ -94,26 +94,27 @@ class ollama(abc_llm):
         pass
 
 if __name__ == "__main__":
-    # deepseek-r1:1.5b
+    # deepseek-r1:1.5b deepseek-r1:8b deepseek-r1:14b
     async def main():
-        # 初始化 LLM 客户端（Ollama 通常不需要 API 密钥，用空字符串占位）
         llm_test = ollama(
-            base_url="http://localhost:11434/v1",
-            model="deepseek-r1:1.5b",
-            api_key="",  # Ollama 不需要密钥，但参数为必填项
+            base_url="http://localhost:11434/v1/",
+            model="deepseek-r1:14b",
             temperature=0.7
         )
-
         messages = [{"role": "user", "content": "你好！"}]
 
         try:
-            # 使用异步生成器获取流式响应
-            async for chunk in llm_test.text_chat(
-                    messages=messages,
-                    system="你是一个乐于助人的助手"
-            ):
-                print(chunk, end="", flush=True)  # 实时输出
+            print('ctrl+c 退出')
+            while True:
+                msg = input("請輸入問題：")
+                messages = [{"role": "user", "content": msg}]
+                async for chunk in llm_test.text_chat(
+                        messages=messages,
+                        system="用繁體中文回答，回答盡量俏皮可愛。"
+                ):
+                    print(chunk, end="", flush=True)# 實時輸出
+                print('\n')
         except Exception as e:
-            print(f"\n发生错误: {str(e)}")
+            print(f"\nERROR: {str(e)}")
 
     asyncio.run(main())
