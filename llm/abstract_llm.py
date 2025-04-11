@@ -6,6 +6,7 @@ from PIL import Image
 
 class abc_llm(metaclass=abc.ABCMeta):
 
+
     @abc.abstractmethod
     async def text_chat(self,
                       messages: List[Dict[str, Any]],
